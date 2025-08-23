@@ -1,0 +1,4 @@
+#Comando padrão do libraryDB
+select l.id as id_livro, l.titulo as titulo_livro, a.nome as nome_autor, a.id as id_autor
+from livro l
+join autor a on a.id = l.id_autor;
