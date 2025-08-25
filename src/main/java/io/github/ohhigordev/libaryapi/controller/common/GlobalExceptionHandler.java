@@ -1,5 +1,7 @@
 package io.github.ohhigordev.libaryapi.controller.common;
 
+import io.github.ohhigordev.libaryapi.Exception.OperacaoNaoPermitidaException;
+import io.github.ohhigordev.libaryapi.Exception.RegistroDuplicadoException;
 import io.github.ohhigordev.libaryapi.controller.dto.ErroCampo;
 import io.github.ohhigordev.libaryapi.controller.dto.ErroResposta;
 import org.springframework.http.HttpStatus;
@@ -27,5 +29,20 @@ public class GlobalExceptionHandler {
                 "Erro de validação",
                 listaErros);
     }
+
+    @ExceptionHandler(RegistroDuplicadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handlerRegistroDuplicadoException(RegistroDuplicadoException e){
+        return ErroResposta.conflito(e.getMessage());
+    }
+
+    @ExceptionHandler(OperacaoNaoPermitidaException.class)
+    public ErroResposta handlerOperacaoNaoPermitidaException(
+            OperacaoNaoPermitidaException e
+    ){
+        return ErroResposta.respostaPadrao(e.getMessage());
+    }
+
+
 
 }
