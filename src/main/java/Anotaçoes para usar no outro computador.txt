@@ -1,0 +1,4 @@
+// Annotation para usar no outro computador para se conectar ao banco de dados
+-> Mude a senha no password para (admin)
+-> Mude a porta de 5432 para 5433
+-> Mude o nome do banco de libary para librarydb

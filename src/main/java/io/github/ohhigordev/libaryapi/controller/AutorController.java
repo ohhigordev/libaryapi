@@ -30,7 +30,7 @@ public class AutorController implements GenericController {
 
 
     @PostMapping
-    public ResponseEntity<Object> salvar(@RequestBody @Valid AutorDTO dto) {
+    public ResponseEntity<Void> salvar(@RequestBody @Valid AutorDTO dto) {
 
         Autor autor = mapper.toEntity(dto);
         service.salvar(autor);
@@ -51,7 +51,7 @@ public class AutorController implements GenericController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> deletar(@PathVariable("id") String id) {
+    public ResponseEntity<Void> deletar(@PathVariable("id") String id) {
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = service.obterPorId(idAutor);
 
@@ -76,7 +76,7 @@ public class AutorController implements GenericController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> atualizar(
+    public ResponseEntity<Void> atualizar(
             @Valid
             @PathVariable("id") String id,
             @RequestBody AutorDTO dto
