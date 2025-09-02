@@ -1,5 +1,6 @@
 package io.github.ohhigordev.libaryapi.controller.common;
 
+import io.github.ohhigordev.libaryapi.Exception.CampoInvalidoException;
 import io.github.ohhigordev.libaryapi.Exception.OperacaoNaoPermitidaException;
 import io.github.ohhigordev.libaryapi.Exception.RegistroDuplicadoException;
 import io.github.ohhigordev.libaryapi.controller.dto.ErroCampo;
@@ -42,6 +43,15 @@ public class GlobalExceptionHandler {
     {
         return ErroResposta.respostaPadrao(e.getMessage());
     }
+
+    @ExceptionHandler(CampoInvalidoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroResposta handlerCampoInvalidoException(CampoInvalidoException e){
+        return new ErroResposta(HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Erro de validação",
+                List.of(new ErroCampo(e.getCampo(), e.getMessage())));
+    }
+
 
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecificationExecutor<Livro> {
@@ -21,7 +22,7 @@ public interface LivroRepository extends JpaRepository<Livro, UUID>, JpaSpecific
     //select * from livro where titulo = titulo;
     List<Livro> findByTitulo(String titulo);
 
-    List<Livro> findByisbn(String isbn);
+    Optional<Livro> findByisbn(String isbn);
 
     // Agora fazendo uma pesquisa utilizando dois parametros
 
