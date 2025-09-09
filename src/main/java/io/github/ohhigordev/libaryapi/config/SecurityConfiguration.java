@@ -2,6 +2,7 @@ package io.github.ohhigordev.libaryapi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -29,6 +30,13 @@ public class SecurityConfiguration {
                 })
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize ->{
+
+                    authorize.requestMatchers("/login").permitAll();
+                    // Aqui significa que apenas usuários com a role "ADMIN" podem fazer operações com a classe autor
+                    authorize.requestMatchers("/autores/**").hasRole("ADMIN");
+                    // Aqui as roles "USER", "ADMIN" ou qualquer outra roles autenticada pode fazer operações na classe livro
+                    authorize.requestMatchers("/livros/**").hasAnyRole("USER", "ADMIN");
+
                     authorize.anyRequest().authenticated();
                 })
                 .build();
