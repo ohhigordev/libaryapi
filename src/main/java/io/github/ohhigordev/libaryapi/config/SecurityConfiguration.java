@@ -6,6 +6,12 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -18,12 +24,40 @@ public class SecurityConfiguration {
         // Aqui basicamente fizemos a configuração padrão do nosso Spring
         return http
                 .csrf(AbstractHttpConfigurer::disable) //Aplicação que ultilizamos quando queremos proteger paginas web (Desabilitamos essa classe)
-                .formLogin(Customizer.withDefaults())
+                .formLogin(configurer ->{
+                    configurer.loginPage("/login").permitAll(); // Aqui permitimos que qualquer pessoa possa acessar a nossa página de login
+                })
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize ->{
                     authorize.anyRequest().authenticated();
                 })
                 .build();
+    }
+    /*
+    Aqui Vamos declarar um Bean que será um codificador para que as senhas que declaramos nos bancos
+    em memória dos nossos usuários sejam criptografadas assim melhorando a segurança da nossa aplicação
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder(10);
+    }
+
+    // Criando um repositório de usuários em memória
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder encoder){
+        UserDetails user1 = User.builder()
+                .username("usuario")
+                .password(encoder.encode("123"))
+                .roles("USER") // Geralmente colocamos as 'roles' em caixa alta;
+                .build();
+
+        UserDetails user2 = User.builder()
+                .username("admin")
+                .password(encoder.encode("321"))
+                .roles("ADMIN") // Geralmente colocamos as 'roles' em caixa alta;
+                .build();
+
+        return new InMemoryUserDetailsManager(user1, user2);
     }
 
 }

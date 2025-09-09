@@ -12,11 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
-@RestController
+import java.util.UUID;
+
+
+@RestController // Usado para API e requisições REST
 @RequestMapping("livros")
 @RequiredArgsConstructor
 public class LivroController implements GenericController{
