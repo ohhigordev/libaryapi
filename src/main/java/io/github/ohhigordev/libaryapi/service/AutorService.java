@@ -1,7 +1,9 @@
 package io.github.ohhigordev.libaryapi.service;
 
 import io.github.ohhigordev.libaryapi.Exception.OperacaoNaoPermitidaException;
+import io.github.ohhigordev.libaryapi.Security.SecurityService;
 import io.github.ohhigordev.libaryapi.model.Autor;
+import io.github.ohhigordev.libaryapi.model.Usuario;
 import io.github.ohhigordev.libaryapi.repository.AutorRepository;
 import io.github.ohhigordev.libaryapi.repository.LivroRepository;
 import io.github.ohhigordev.libaryapi.validator.AutorValidator;
@@ -22,10 +24,13 @@ public class AutorService {
     private final AutorRepository repository;
     private final AutorValidator validator;
     private final LivroRepository livroRepository;
+    private final SecurityService securityService;
 
 
     public Autor salvar(Autor autor){
         validator.validar(autor);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        autor.setUsuario(usuario);
         return repository.save(autor);
     }
 

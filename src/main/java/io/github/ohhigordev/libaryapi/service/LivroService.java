@@ -1,7 +1,9 @@
 package io.github.ohhigordev.libaryapi.service;
 
+import io.github.ohhigordev.libaryapi.Security.SecurityService;
 import io.github.ohhigordev.libaryapi.model.GeneroLivro;
 import io.github.ohhigordev.libaryapi.model.Livro;
+import io.github.ohhigordev.libaryapi.model.Usuario;
 import io.github.ohhigordev.libaryapi.repository.LivroRepository;
 import io.github.ohhigordev.libaryapi.repository.Specs.LivroSpecs;
 import io.github.ohhigordev.libaryapi.validator.LivroValidator;
@@ -26,9 +28,13 @@ public class LivroService {
 
     private final LivroRepository repository;
     private final LivroValidator validator;
+    private final SecurityService securityService;
 
 
     public Livro salvar(Livro livro) {
+        validator.validar(livro);
+        Usuario usuario = securityService.obterUsuarioLogado();
+        livro.setUsuario(usuario);
         return repository.save(livro);
     }
 
