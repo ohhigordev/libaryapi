@@ -1,6 +1,7 @@
 package io.github.ohhigordev.libaryapi.config;
 
 import io.github.ohhigordev.libaryapi.Security.CustomUserDetailsService;
+import io.github.ohhigordev.libaryapi.Security.LoginSocialSuccessHandler;
 import io.github.ohhigordev.libaryapi.service.UsuarioService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +22,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   LoginSocialSuccessHandler successHandler) throws Exception{
 
         // Aqui basicamente fizemos a configuração padrão do nosso Spring
         return http
@@ -38,6 +40,11 @@ public class SecurityConfiguration {
 
                     authorize.anyRequest().authenticated();
                 })
+                .oauth2Login(oauth2 -> {
+                    oauth2
+                            .loginPage("/login")
+                            .successHandler(successHandler);
+                })
                 .build();
     }
     /*
@@ -50,7 +57,7 @@ public class SecurityConfiguration {
     }
 
     // Criando um repositório de usuários em memória
-    @Bean
+//    @Bean
     public UserDetailsService userDetailsService(UsuarioService usuarioService){
 //        UserDetails user1 = User.builder()
 //                .username("usuario")
